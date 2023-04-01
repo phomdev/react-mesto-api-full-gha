@@ -49,6 +49,6 @@ class AuthApi {
 }
 
 // Создание экземпляра класса
-const apiAuth = new AuthApi('http://localhost:3000/');
+const apiAuth = new AuthApi('https://api.phomdev-mesto.nomoredomains.work/');
 // Экспорт экземпляра класса
 export default apiAuth;
