@@ -1,5 +1,3 @@
-/* eslint linebreak-style: ["error", "windows"] */
-
 const winston = require('winston');
 const expressWinston = require('express-winston');
 
