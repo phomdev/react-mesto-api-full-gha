@@ -1,6 +1,6 @@
 class AuthApi {
-  constructor(authUrl) {
-    this._authUrl = authUrl;
+  constructor(apiAddress) {
+    this._authUrl = apiAddress;
   }
   // Метод обработки ответа сервера
   _processingServerResponse (res) {

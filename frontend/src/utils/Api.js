@@ -1,9 +1,6 @@
-import apiFindings from './apiFindings';
-
 class Api {
-  constructor({ link, headers }) {
-    this._link = link;
-    this._headers = headers;
+  constructor(apiAddress) {
+    this._link = apiAddress;
   }
   // Метод обработки ответа сервера
   _processingServerResponse (res) {
@@ -14,75 +11,89 @@ class Api {
     }
   }
   // Метод инициализации карточек с сервера
-  getInitialCards () {
+  getInitialCards() {
     return fetch(`${this._link}cards`, {
-      headers: this._headers
-      // По умолчанию fetch — это GET, можно не указывать
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${ localStorage.getItem('token') }`,
+      },
     })
-      .then(this._processingServerResponse)
+    .then(this._processingServerResponse)
   }
   // Метод добавления новой карточки на сервер
-  addNewCard (name, link) {
+  addNewCard(name, link) {
     return fetch(`${this._link}cards`, {
-      headers: this._headers,
       method: 'POST',
-      body: JSON.stringify({ name, link })
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${ localStorage.getItem('token') }`,
+      },
+      body: JSON.stringify({ name, link }),
     })
-      .then(this._processingServerResponse)
+    .then(this._processingServerResponse)
   }
   // Метод удаления карточки с сервера
-  deleteCard (cardId) {
+  deleteCard(cardId) {
     return fetch(`${this._link}cards/${cardId}`, {
-      headers: this._headers,
       method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${ localStorage.getItem('token') }`,
+      },
     })
-      .then(this._processingServerResponse)
+    .then(this._processingServerResponse)
   }
   // Метод получения данных пользователя с сервера
-  getUserData () {
+  getUserData() {
     return fetch(`${this._link}users/me`, {
-      headers: this._headers
-      // По умолчанию fetch — это GET, можно не указывать
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${ localStorage.getItem('token') }`,
+      },
     })
-      .then( this._processingServerResponse)
+    .then(this._processingServerResponse)
   }
   // Метод отправки данных пользователя на сервер
-  sendUserData (userName, userAbout) {
+  sendUserData(userName, userAbout) {
     return fetch(`${this._link}users/me`, {
-      headers: this._headers,
-      method: 'PATCH',
-      body: JSON.stringify({ name: userName, about: userAbout })
+      method: "PATCH",
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${ localStorage.getItem('token') }`,
+      },
+      body: JSON.stringify({ name: userName, about: userAbout }),
     })
-      .then(this._processingServerResponse)
+    .then(this._processingServerResponse)
   }
   // Метод отправки данных о новом аватаре на сервер
-  sendAvatarData (avatarLink) {
+  sendAvatarData(avatarLink) {
     return fetch(`${this._link}users/me/avatar`, {
-      headers: this._headers,
       method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${ localStorage.getItem('token') }`,
+      },
       body: JSON.stringify({ avatar: avatarLink.avatar })
     })
-      .then(this._processingServerResponse)
+    .then(this._processingServerResponse)
   }
   // Метод обработки лайков карточки
-  changeLikeCardStatus (cardId, isLiked) {
-    if (isLiked) {
-      return fetch(`${this._link}cards/${cardId}/likes`, {
-        headers: this._headers,
-        method: 'PUT',
-      })
-      .then(this._processingServerResponse)
-    } else {
-      return fetch(`${this._link}cards/${cardId}/likes`, {
-        headers: this._headers,
-        method: 'DELETE',
-      })
-      .then(this._processingServerResponse)
-    }
+  changeLikeCardStatus(cardId, isLiked) {
+    const methodUsed = isLiked ? 'PUT' : 'DELETE';
+    return fetch(`${this._link}cards/${cardId}/likes`, {
+      method: methodUsed,
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${ localStorage.getItem('token') }`,
+      },
+    })
+    .then(this._processingServerResponse)
   }
 }
 
 // Создание экземпляра класса
-const apiConnect = new Api(apiFindings);
+const apiConnect = new Api('https://api.phomdev-mesto.nomoredomains.work/');
 // Экспорт экземпляра класса
 export default apiConnect;

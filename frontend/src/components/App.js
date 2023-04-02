@@ -58,7 +58,7 @@ function App () {
   // Обработчик удаления карточки
   function handleCardDelete (card) {
     apiConnect.deleteCard(card._id)
-      .then( () => { setCards( (cardsArray) => cardsArray.filter( (cardItem) => cardItem._id !== card._id)) })
+      .then( () => { setCards( (listCards) => listCards.filter((cardItem) => cardItem._id !== card._id) ); })
       .catch( (err) => { console.log(`Возникла ошибка при удалении карточки, ${err}`) })
   }
   // Обработчик изменения аватара
@@ -78,10 +78,10 @@ function App () {
   }
   // Обработчик лайков карточки
   function handleCardLike (card) {
-    const isLiked = card.likes.some(cardItem => cardItem._id === currentUser._id);
+    const isLiked = card.likes.some( (like) => like === currentUser._id );
     apiConnect.changeLikeCardStatus(card._id, !isLiked)
-      .then( (cardsItem) => {
-        setCards( (state) => state.map( (cardItem) => cardItem._id === card._id ? cardsItem : cardItem) )
+      .then( (cardItem) => {
+        setCards( (listCards) => listCards.map( (item) => (item._id === card._id ? cardItem : item) ) );
       })
       .catch( (err) => { console.log(`Возникла ошибка при обработке лайков, ${err}`) })
   }

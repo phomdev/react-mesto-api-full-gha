@@ -5,9 +5,9 @@ function Card (props) {
   // Подписка на контекст
   const userItem = useContext(CurrentUserContext);
   // Определение владения карточкой
-  const isOwn = props.card.owner._id === userItem._id;
+  const isOwn = props.card.owner === userItem._id;
   // Определение наличие поставленного лайка
-  const isLiked = props.card.likes.some(item => item._id === userItem._id);
+  const isLiked = props.card.likes.some(item => item === userItem._id);
   function handleClick () { props.onCardClick(props.card) }
   function handleDelete () { props.onCardDelete(props.card) }
   function handleLike () { props.onCardLike(props.card) }

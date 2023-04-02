@@ -14,7 +14,6 @@ const Forbidden = require('../utils/response-errors/Forbidden'); // 403
 // Получение списка карточек
 const getCardList = (req, res, next) => {
   Card.find({})
-    .populate(['owner', 'likes'])
     .then((cardList) => res.send(cardList))
     .catch((error) => next(error));
 };
@@ -35,7 +34,6 @@ const createCard = (req, res, next) => {
 // Удаление карточки
 const deleteCard = (req, res, next) => {
   Card.findById(req.params.cardId)
-    .populate(['owner', 'likes'])
     .then((selectedCard) => {
       // Если пользователь не создатель или карточки нет
       if (!selectedCard) { return next(new NotFound('Карточка по указанному _id не найдена')); }
@@ -60,7 +58,6 @@ const likeCard = (req, res, next) => {
     { $addToSet: { likes: req.user._id } },
     { new: true },
   )
-    .populate(['owner', 'likes'])
     .then((selectedCard) => {
       if (selectedCard) {
         res.send(selectedCard);
@@ -81,7 +78,6 @@ const removeLikeCard = (req, res, next) => {
     { $pull: { likes: req.user._id } },
     { new: true },
   )
-    .populate(['owner', 'likes'])
     .then((selectedCard) => {
       if (selectedCard) {
         res.send(selectedCard);
